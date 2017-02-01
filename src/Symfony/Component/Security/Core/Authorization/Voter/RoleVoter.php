@@ -46,7 +46,7 @@ class RoleVoter implements VoterInterface
                 $attribute = $attribute->getRole();
             }
 
-            if (!is_string($attribute) || 0 !== strpos($attribute, $this->prefix)) {
+            if (!is_string($attribute) || ("" !== $this->prefix && 0 !== strpos($attribute, $this->prefix))) {
                 continue;
             }
 

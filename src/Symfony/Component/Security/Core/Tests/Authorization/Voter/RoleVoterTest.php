@@ -45,6 +45,28 @@ class RoleVoterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+
+    /**
+     * @dataProvider getPrefixedVoteTests
+     */
+    public function testPrefixedVote($prefix, $roles, $attributes, $expected)
+    {
+        $voter = new RoleVoter($prefix);
+
+        $this->assertSame($expected, $voter->vote($this->getToken($roles), null, $attributes));
+    }
+
+    public function getPrefixedVoteTests()
+    {
+        return array(
+            array('', array('FOO'), array('FOO'), VoterInterface::ACCESS_GRANTED),
+            array('', array('FOO'), array('NOT_FOO'), VoterInterface::ACCESS_DENIED),
+
+            array("EXAMPLE_", array('FOO'), array('FOO'), VoterInterface::ACCESS_ABSTAIN),
+            array("EXAMPLE_", array('EXAMPLE_FOO'), array('EXAMPLE_FOO'), VoterInterface::ACCESS_GRANTED),
+        );
+    }
+
     protected function getToken(array $roles)
     {
         foreach ($roles as $i => $role) {
